@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace guitar_theory;
+namespace GuitarTheory;
 
 class Program : MauiApplication
 {

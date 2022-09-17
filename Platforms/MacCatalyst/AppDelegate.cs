@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace guitar_theory;
+namespace GuitarTheory;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace guitar_theory;
+namespace GuitarTheory;
 
 public class Program
 {

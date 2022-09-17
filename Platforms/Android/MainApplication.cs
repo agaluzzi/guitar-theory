@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace guitar_theory;
+namespace GuitarTheory;
 
 [Application]
 public class MainApplication : MauiApplication
