@@ -1,11 +1,10 @@
-using CommunityToolkit.Maui.Markup;
-
 namespace GuitarTheory;
 
 public class MainPage : ContentPage
 {
     public MainPage()
     {
-        Content = new Label {Text = "HELLO"}.Center();
+        var guitar = new Guitar(frets: 12);
+        Content = new GuitarView(guitar);
     }
 }
