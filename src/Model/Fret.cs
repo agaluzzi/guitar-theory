@@ -6,7 +6,7 @@ public record Fret
 
     public Fret(int number)
     {
-        if (number < 1)
+        if (number < 0)
         {
             throw new ArgumentException("Invalid fret number: " + number);
         }

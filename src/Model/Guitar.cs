@@ -4,6 +4,11 @@ namespace GuitarTheory;
 
 public class Guitar
 {
+    public IEnumerable<FingerPosition> FingerPositions =>
+        from str in Strings
+        from fret in Frets
+        select new FingerPosition(str, fret);
+
     public IReadOnlyList<GuitarString> Strings { get; }
     public IReadOnlyList<Fret> Frets { get; }
 
@@ -19,7 +24,7 @@ public class Guitar
             new GuitarString(6, Note.E),
         };
 
-        Frets = Enumerable.Range(start: 1, count: frets)
+        Frets = Enumerable.Range(start: 0, count: frets + 1)
             .Select(f => new Fret(f))
             .ToImmutableArray();
     }

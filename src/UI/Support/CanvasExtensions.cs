@@ -22,6 +22,11 @@ public static class CanvasExtensions
         canvas.FillCircle(centerX: centerX, centerY: centerY, radius: radius);
     }
 
+    public static void FillCircle(this ICanvas canvas, PointF center, float radius, Paint paint)
+    {
+        FillCircle(canvas, center.X, center.Y, radius, paint);
+    }
+
     public static void ClearShadow(this ICanvas canvas)
     {
         canvas.SetShadow(offset: SizeF.Zero, blur: 0f, Colors.Transparent);

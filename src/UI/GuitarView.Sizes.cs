@@ -18,14 +18,14 @@ public partial class GuitarView
 
     private void ComputeSizes(RectF bounds)
     {
-        FretSpacing = bounds.Width / (FretCount + 1);
+        FretSpacing = bounds.Width / FretCount;
         FretWidth = FretSpacing / 12;
         NutWidth = FretWidth * 1.5f;
 
-        var fretboardHeight = FretSpacing * 3;
+        var fretboardHeight = FretSpacing * 3.5f;
         StringInset = fretboardHeight * 0.03f;
         StringSpacing = (fretboardHeight - (2 * StringInset)) / (StringCount - 1);
-        NoteRadius = StringSpacing / 2;
+        NoteRadius = StringSpacing * 0.4f;
 
         var fretboardOffsetX = FretSpacing;
         var fretboardWidth = bounds.Width - fretboardOffsetX;
