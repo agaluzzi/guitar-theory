@@ -1,3 +1,5 @@
+using Font = Microsoft.Maui.Graphics.Font;
+
 namespace GuitarTheory.Extensions;
 
 public static class CanvasExtensions
@@ -30,5 +32,22 @@ public static class CanvasExtensions
     public static void ClearShadow(this ICanvas canvas)
     {
         canvas.SetShadow(offset: SizeF.Zero, blur: 0f, Colors.Transparent);
+    }
+
+    public static void DrawString(
+        this ICanvas canvas,
+        string value,
+        RectF bounds,
+        float size,
+        Color color,
+        FontStyleType style = FontStyleType.Normal,
+        int weight = FontWeights.Normal,
+        HorizontalAlignment horizontal = HorizontalAlignment.Center,
+        VerticalAlignment vertical = VerticalAlignment.Center)
+    {
+        canvas.Font = new Font(name: null, weight: weight, styleType: style);
+        canvas.FontSize = size;
+        canvas.FontColor = color;
+        canvas.DrawString(value, bounds, horizontal, vertical);
     }
 }

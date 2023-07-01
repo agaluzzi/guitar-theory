@@ -45,6 +45,7 @@ public record Note : IComparable<Note>
 
     public Pitch Pitch { get; }
     public string Name { get; }
+    public char Letter => Name[0];
     public Accidental Accidental { get; }
     public bool IsSharp => Accidental == Accidental.Sharp;
     public bool IsFlat => Accidental == Accidental.Flat;

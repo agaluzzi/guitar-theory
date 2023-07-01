@@ -1,13 +1,10 @@
 using GuitarTheory.Extensions;
 using GuitarTheory.UI.Support;
-using Font = Microsoft.Maui.Graphics.Font;
 
 namespace GuitarTheory;
 
-public partial class GuitarView : GraphicsView, IDrawable
+public partial class GuitarView : XGraphicsView
 {
-    private static readonly ILogger Logger = Log.ForContext<GuitarView>();
-
     private int StringCount => guitar.Strings.Count;
     private int FretCount => guitar.Frets.Count;
 
@@ -18,11 +15,19 @@ public partial class GuitarView : GraphicsView, IDrawable
     {
         this.guitar = guitar;
         this.overlay = overlay;
-        Drawable = this;
         overlay.Changed += Invalidate;
     }
 
-    public void Draw(ICanvas canvas, RectF bounds)
+    protected override void Draw(
+        ICanvas canvas,
+        float top,
+        float bottom,
+        float left,
+        float right,
+        float width,
+        float height,
+        PointF center,
+        RectF bounds)
     {
         try
         {
@@ -110,27 +115,10 @@ public partial class GuitarView : GraphicsView, IDrawable
         {
             foreach (var position in guitar.FingerPositions.Where(p => tone.Matches(p.Pitch)))
             {
-                var center = GetPoint(position);
-                var color = ColorScheme.GetColor(tone.Note);
-                canvas.FillCircle(center, NoteRadius, new SolidPaint(color));
-
-                canvas.StrokeColor = Colors.White;
-                canvas.StrokeSize = 2;
-                canvas.DrawCircle(center, NoteRadius);
-
-                var textOffsetX = tone.Note.Accidental == Accidental.Natural ? 0 : 2;
-                const float textOffsetY = 6;
-                canvas.Font = Font.DefaultBold;
-                canvas.FontColor = color.GetContrastingColor();
-                canvas.FontSize = NoteRadius * 1.2f;
-                canvas.DrawString(
-                    value: tone.Note.Name,
-                    x: center.X - NoteRadius + textOffsetX,
-                    y: center.Y - NoteRadius + textOffsetY,
-                    width: (NoteRadius * 2) - textOffsetX,
-                    height: (NoteRadius * 2) - textOffsetY,
-                    HorizontalAlignment.Center,
-                    VerticalAlignment.Center);
+                DrawingUtils.DrawNote(tone.Note,
+                    center: GetPoint(position),
+                    radius: NoteRadius,
+                    canvas);
             }
         }
     }

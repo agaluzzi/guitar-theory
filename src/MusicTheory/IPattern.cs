@@ -14,4 +14,6 @@ public interface IPattern
             yield return new Tone(root + interval, interval);
         }
     }
+
+    public string Describe(Note root);
 }

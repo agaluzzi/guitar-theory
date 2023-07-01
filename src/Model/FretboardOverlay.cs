@@ -5,7 +5,7 @@ public class FretboardOverlay
     public event Action? Changed;
     private void PublishChange() => Changed?.Invoke();
 
-    public IEnumerable<Tone> Tones => pattern?.GetTones(root) ?? Enumerable.Empty<Tone>();
+    public IEnumerable<Tone> Tones => pattern.GetTones(root);
 
     public Note Root
     {
@@ -17,7 +17,7 @@ public class FretboardOverlay
         }
     }
 
-    public IPattern? Pattern
+    public IPattern Pattern
     {
         get => pattern;
         set
@@ -28,5 +28,6 @@ public class FretboardOverlay
     }
 
     private Note root = Note.C;
-    private IPattern? pattern = Scales.All[0];
+    private IPattern pattern = Scales.All[0];
+    public string Title => pattern.Describe(root);
 }

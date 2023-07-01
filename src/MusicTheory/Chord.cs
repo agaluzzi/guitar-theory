@@ -7,7 +7,12 @@ public class Chord : IPattern
 
     public Chord(string name, params Interval[] intervals)
     {
-        Name = $"{name} Chord";
+        Name = name;
         Intervals = intervals;
+    }
+
+    public string Describe(Note root)
+    {
+        return $"{root} {Name} Chord";
     }
 }
