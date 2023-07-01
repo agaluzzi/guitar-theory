@@ -7,7 +7,7 @@ public class Chord : IPattern
 
     public Chord(string name, params Interval[] intervals)
     {
-        Name = name;
+        Name = $"{name} Chord";
         Intervals = intervals;
     }
 }

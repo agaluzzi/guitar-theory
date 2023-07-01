@@ -28,5 +28,5 @@ public class FretboardOverlay
     }
 
     private Note root = Note.C;
-    private IPattern? pattern = Scales.Major;
+    private IPattern? pattern = Scales.All[0];
 }

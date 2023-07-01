@@ -23,21 +23,21 @@ public record Note : IComparable<Note>
     public static IReadOnlyList<Note> All = new[]
         {C, CSharp, DFlat, D, DSharp, EFlat, E, F, FSharp, GFlat, G, GSharp, AFlat, A, ASharp, BFlat, B};
 
-    public static Note Get(Pitch pitch, bool preferFlat)
+    public static Note Get(Pitch pitch, Accidental prefer = Accidental.Natural)
     {
         return pitch.Number switch
         {
             0 => C,
-            1 => preferFlat ? DFlat : CSharp,
+            1 => prefer == Accidental.Flat ? DFlat : CSharp,
             2 => D,
-            3 => preferFlat ? EFlat : DSharp,
+            3 => prefer == Accidental.Sharp ? DSharp : EFlat,
             4 => E,
             5 => F,
-            6 => preferFlat ? GFlat : FSharp,
+            6 => prefer == Accidental.Flat ? GFlat : FSharp,
             7 => G,
-            8 => preferFlat ? AFlat : GSharp,
+            8 => prefer == Accidental.Sharp ? GSharp : AFlat,
             9 => A,
-            10 => preferFlat ? BFlat : ASharp,
+            10 => prefer == Accidental.Sharp ? ASharp : BFlat,
             11 => B,
             _ => throw new ArgumentException($"Unexpected pitch: {pitch}")
         };
@@ -48,6 +48,7 @@ public record Note : IComparable<Note>
     public Accidental Accidental { get; }
     public bool IsSharp => Accidental == Accidental.Sharp;
     public bool IsFlat => Accidental == Accidental.Flat;
+    public bool IsNatural => Accidental == Accidental.Natural;
     public bool HasAlternate => Accidental != Accidental.Natural;
 
     private Note(Pitch pitch, string name, Accidental accidental)
@@ -61,27 +62,16 @@ public record Note : IComparable<Note>
     {
         return Accidental switch
         {
-            Accidental.Flat => Get(Pitch, preferFlat: false),
-            Accidental.Sharp => Get(Pitch, preferFlat: true),
+            Accidental.Flat => Get(Pitch, prefer: Accidental.Sharp),
+            Accidental.Sharp => Get(Pitch, prefer: Accidental.Flat),
             Accidental.Natural => this,
             _ => throw new ArgumentOutOfRangeException($"Unexpected accidental: {Accidental}")
         };
     }
 
-    public Note GetNatural()
+    public Note Shift(int semitones, Accidental prefer)
     {
-        return Accidental switch
-        {
-            Accidental.Flat => Shift(1, preferFlat: false),
-            Accidental.Sharp => Shift(-1, preferFlat: false),
-            Accidental.Natural => this,
-            _ => throw new ArgumentOutOfRangeException($"Unexpected accidental: {Accidental}")
-        };
-    }
-
-    public Note Shift(int halfSteps, bool preferFlat)
-    {
-        return Get(Pitch + halfSteps, preferFlat: preferFlat);
+        return Get(Pitch + semitones, prefer);
     }
 
     public override string ToString()
@@ -105,6 +95,15 @@ public record Note : IComparable<Note>
 
     public static Note operator +(Note root, Interval interval)
     {
-        return root.Shift(interval.HalfSteps, preferFlat: root.IsFlat || interval.IsLowered);
+        var preference = root.Accidental;
+        if (preference == Accidental.Natural && interval.IsLowered)
+        {
+            preference = Accidental.Flat;
+        }
+        else if (preference == Accidental.Natural && interval.IsRaised)
+        {
+            preference = Accidental.Sharp;
+        }
+        return root.Shift(interval.Semitones, preference);
     }
 }

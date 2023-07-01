@@ -7,7 +7,7 @@ public class Scale : IPattern
 
     public Scale(string name, params Interval[] intervals)
     {
-        Name = name;
+        Name = $"{name} Scale";
         Intervals = intervals;
     }
 }

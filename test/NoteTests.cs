@@ -1,3 +1,5 @@
+using static GuitarTheory.Accidental;
+
 namespace UnitTests;
 
 public class NoteTests
@@ -53,12 +55,17 @@ public class NoteTests
     public void ShouldGetNoteByPitch()
     {
         Pitch.All
-            .Select(pitch => Note.Get(pitch, preferFlat: false))
+            .Select(pitch => Note.Get(pitch))
+            .Select(note => note.Name)
+            .Should().Equal("C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B");
+
+        Pitch.All
+            .Select(pitch => Note.Get(pitch, prefer: Sharp))
             .Select(note => note.Name)
             .Should().Equal("C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B");
 
         Pitch.All
-            .Select(pitch => Note.Get(pitch, preferFlat: true))
+            .Select(pitch => Note.Get(pitch, prefer: Flat))
             .Select(note => note.Name)
             .Should().Equal("C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B");
     }
@@ -66,43 +73,43 @@ public class NoteTests
     [Theory]
     public void ShouldShiftZero(Note note)
     {
-        note.Shift(0, preferFlat: note.IsFlat).Should().Be(note);
+        note.Shift(0, note.Accidental).Should().Be(note);
     }
 
     [Theory]
     public void ShouldShiftOctave(Note note)
     {
-        note.Shift(12, preferFlat: note.IsFlat).Should().Be(note);
+        note.Shift(12, note.Accidental).Should().Be(note);
     }
 
     [Test]
     public void ShouldShiftUp()
     {
-        Note.C.Shift(1, preferFlat: false).Should().Be(Note.CSharp);
-        Note.C.Shift(1, preferFlat: true).Should().Be(Note.DFlat);
+        Note.C.Shift(1, prefer: Sharp).Should().Be(Note.CSharp);
+        Note.C.Shift(1, prefer: Flat).Should().Be(Note.DFlat);
 
-        Note.C.Shift(11, preferFlat: false).Should().Be(Note.B);
-        Note.C.Shift(11, preferFlat: true).Should().Be(Note.B);
+        Note.C.Shift(11, prefer: Natural).Should().Be(Note.B);
+        Note.C.Shift(11, prefer: Natural).Should().Be(Note.B);
     }
 
     [Test]
     public void ShouldShiftDown()
     {
-        Note.E.Shift(-1, preferFlat: false).Should().Be(Note.DSharp);
-        Note.E.Shift(-1, preferFlat: true).Should().Be(Note.EFlat);
+        Note.E.Shift(-1, prefer: Sharp).Should().Be(Note.DSharp);
+        Note.E.Shift(-1, prefer: Flat).Should().Be(Note.EFlat);
 
-        Note.E.Shift(-11, preferFlat: false).Should().Be(Note.F);
-        Note.E.Shift(-11, preferFlat: true).Should().Be(Note.F);
+        Note.E.Shift(-11, prefer: Natural).Should().Be(Note.F);
+        Note.E.Shift(-11, prefer: Natural).Should().Be(Note.F);
     }
 
     [Theory]
-    public void ShouldAddIntervalToRoot(Note note)
+    public void ShouldAddIntervalToRoot(Note root)
     {
-        (note + Interval.Unison).Should().Be(note);
-        (note + Interval.Octave).Should().Be(note);
+        (root + Interval.Unison).Should().Be(root);
+        (root + Interval.Octave).Should().Be(root);
 
-        (note + Interval.MajorThird).Should().Be(note.Shift(4, preferFlat: note.IsFlat));
-        (note + Interval.MinorSeventh).Should().Be(note.Shift(10, preferFlat: true));
+        (root + Interval.AugmentedFourth).Should().Be(root.Shift(6, prefer: root.IsFlat ? Flat : Sharp));
+        (root + Interval.MinorSeventh).Should().Be(root.Shift(10, prefer: root.IsSharp ? Sharp : Flat));
     }
 
     [Theory]

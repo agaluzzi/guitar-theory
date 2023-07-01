@@ -30,10 +30,10 @@ public class GuitarTests
     {
         const int count = 12;
         var guitar = new Guitar(frets: count);
-        guitar.Frets.Should().HaveCount(count);
-        for (var i = 0; i < count; i++)
+        guitar.Frets.Should().HaveCount(count + 1); // including the open string (fret 0)
+        for (var i = 0; i < count + 1; i++)
         {
-            guitar.Frets[i].Number.Should().Be(i + 1);
+            guitar.Frets[i].Number.Should().Be(i);
         }
     }
 }

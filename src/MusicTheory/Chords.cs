@@ -2,8 +2,6 @@ namespace GuitarTheory;
 
 public static class Chords
 {
-    public static Chord Default => All[0];
-
     public static readonly IReadOnlyList<Chord> All = new[]
     {
         new Chord("Major",

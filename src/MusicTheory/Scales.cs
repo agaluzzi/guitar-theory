@@ -2,17 +2,15 @@ namespace GuitarTheory;
 
 public static class Scales
 {
-    public static readonly Scale Major = new("Major",
-        Interval.MajorSecond,
-        Interval.MajorThird,
-        Interval.PerfectFourth,
-        Interval.PerfectFifth,
-        Interval.MajorSixth,
-        Interval.MajorSeventh);
-
     public static readonly IReadOnlyList<Scale> All = new[]
     {
-        Major,
+        new("Major",
+            Interval.MajorSecond,
+            Interval.MajorThird,
+            Interval.PerfectFourth,
+            Interval.PerfectFifth,
+            Interval.MajorSixth,
+            Interval.MajorSeventh),
 
         new Scale("Melodic Minor",
             Interval.MajorSecond,
