@@ -12,6 +12,14 @@ public static class Scales
             Interval.MajorSixth,
             Interval.MajorSeventh),
 
+        new Scale("Minor",
+            Interval.MajorSecond,
+            Interval.MinorThird,
+            Interval.PerfectFourth,
+            Interval.PerfectFifth,
+            Interval.MinorSixth,
+            Interval.MinorSeventh),
+
         new Scale("Melodic Minor",
             Interval.MajorSecond,
             Interval.MinorThird,
@@ -27,14 +35,6 @@ public static class Scales
             Interval.PerfectFifth,
             Interval.MinorSixth,
             Interval.MajorSeventh),
-
-        new Scale("Natural Minor",
-            Interval.MajorSecond,
-            Interval.MinorThird,
-            Interval.PerfectFourth,
-            Interval.PerfectFifth,
-            Interval.MinorSixth,
-            Interval.MinorSeventh),
 
         new Scale("Pentatonic Major",
             Interval.MajorSecond,
