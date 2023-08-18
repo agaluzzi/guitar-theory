@@ -25,7 +25,7 @@ public partial class GuitarView
         var fretboardHeight = FretSpacing * 3.5f;
         StringInset = fretboardHeight * 0.03f;
         StringSpacing = (fretboardHeight - (2 * StringInset)) / (StringCount - 1);
-        NoteRadius = StringSpacing * 0.4f;
+        NoteRadius = StringSpacing * 0.35f;
 
         var fretboardOffsetX = FretSpacing;
         var fretboardWidth = bounds.Width - fretboardOffsetX;

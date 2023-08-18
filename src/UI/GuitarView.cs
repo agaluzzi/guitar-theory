@@ -118,7 +118,8 @@ public partial class GuitarView : XGraphicsView
                 DrawingUtils.DrawNote(tone.Note,
                     center: GetPoint(position),
                     radius: NoteRadius,
-                    canvas);
+                    canvas,
+                    tone.Note == overlay.Root ? NoteStyle.Emphasized : NoteStyle.Normal);
             }
         }
     }

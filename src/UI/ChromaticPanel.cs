@@ -3,12 +3,14 @@ using GuitarTheory.UI.Support;
 
 namespace GuitarTheory;
 
-public class ControlPanel : XGraphicsView
+public class ChromaticPanel : XGraphicsView
 {
+    private readonly Thickness padding = new(horizontalSize: 20, verticalSize: 0);
+
     private readonly FretboardOverlay overlay;
     private readonly TouchMap<Note> touchMap = new();
 
-    public ControlPanel(FretboardOverlay overlay)
+    public ChromaticPanel(FretboardOverlay overlay)
     {
         this.overlay = overlay;
         overlay.Changed += Invalidate;
@@ -27,21 +29,12 @@ public class ControlPanel : XGraphicsView
         RectF bounds)
     {
         // Determine sizing/positioning, based on the available width
-        var noteSpacing = width / 12;
-        var panelHeight = noteSpacing * 1.5f;
+        var noteSpacing = (float) (width - padding.HorizontalThickness) / 12;
+        var panelHeight = noteSpacing * 1.25f;
         var panelBounds = bounds with {Height = panelHeight, Top = center.Y - (panelHeight / 2)};
 
         // Background
         canvas.FillRectangle(panelBounds, Colors.LightGray.AsPaint());
-
-        // Title
-        canvas.DrawString(
-            value: overlay.Title,
-            bounds: bounds with {Bottom = panelBounds.Top},
-            size: noteSpacing * 0.3f,
-            color: Colors.White,
-            weight: FontWeights.ExtraBold,
-            vertical: VerticalAlignment.Bottom);
 
         // Notes
         var tones = overlay.Tones.ToArray();
@@ -53,7 +46,7 @@ public class ControlPanel : XGraphicsView
             var note = tone?.Note ?? Note.Get(pitch);
 
             var noteBounds = new RectF(
-                x: left + (i * noteSpacing),
+                x: left + (float) padding.Left + (i * noteSpacing),
                 y: panelBounds.Top,
                 width: noteSpacing,
                 height: panelHeight);
@@ -67,11 +60,12 @@ public class ControlPanel : XGraphicsView
     private void DrawNote(Note note, Interval? interval, RectF bounds, ICanvas canvas)
     {
         // Colored circle with note name (translucent if it's not included in the current pattern)
-        canvas.Alpha = interval == null ? 0.2f : 1.0f;
+        canvas.Alpha = interval == null ? 0.4f : 1.0f;
         DrawingUtils.DrawNote(note,
             center: bounds.Center.Offset(dx: 0, dy: bounds.Height * -0.1f),
             radius: bounds.Width * .3f,
-            canvas);
+            canvas,
+            interval == null ? NoteStyle.GrayedOut : NoteStyle.Normal);
 
         // Interval label, below the circle
         if (interval != null)
