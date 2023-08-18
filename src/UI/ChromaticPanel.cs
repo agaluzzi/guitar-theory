@@ -59,18 +59,24 @@ public class ChromaticPanel : XGraphicsView
 
     private void DrawNote(Note note, Interval? interval, RectF bounds, ICanvas canvas)
     {
+        var options = interval == null ?
+            NoteOptions.GrayedOut :
+            interval.IsRoot ?
+                NoteOptions.Emphasized :
+                NoteOptions.None;
+
         // Colored circle with note name (translucent if it's not included in the current pattern)
-        canvas.Alpha = interval == null ? 0.4f : 1.0f;
         DrawingUtils.DrawNote(note,
+            interval,
             center: bounds.Center.Offset(dx: 0, dy: bounds.Height * -0.1f),
             radius: bounds.Width * .3f,
             canvas,
-            interval == null ? NoteStyle.GrayedOut : NoteStyle.Normal);
+            options);
 
         // Interval label, below the circle
         if (interval != null)
         {
-            var label = interval.Degree == 1 ? "Root" : interval.Abbreviation;
+            var label = interval.IsRoot ? "Root" : interval.Abbreviation;
             canvas.DrawString(label,
                 RectF.FromLTRB(
                     left: bounds.Left,

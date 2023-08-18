@@ -27,7 +27,18 @@ public class FretboardOverlay
         }
     }
 
+    public bool DisplayInterval
+    {
+        get => displayInterval;
+        set
+        {
+            displayInterval = value;
+            PublishChange();
+        }
+    }
+
     private Note root = Note.C;
     private IPattern pattern = Scales.All[0];
     public string Title => pattern.Describe(root);
+    private bool displayInterval;
 }

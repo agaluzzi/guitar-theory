@@ -56,6 +56,7 @@ public record Interval
     public IntervalType Type { get; }
     public bool IsLowered => Type is IntervalType.Minor or IntervalType.Diminished;
     public bool IsRaised => Type is IntervalType.Augmented;
+    public bool IsRoot => Semitones == 0;
 
     public string Abbreviation
     {

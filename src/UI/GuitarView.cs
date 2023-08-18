@@ -115,11 +115,22 @@ public partial class GuitarView : XGraphicsView
         {
             foreach (var position in guitar.FingerPositions.Where(p => tone.Matches(p.Pitch)))
             {
+                var options = NoteOptions.UpDownArrow;
+                if (tone.Interval.IsRoot)
+                {
+                    options |= NoteOptions.Emphasized;
+                }
+                if (overlay.DisplayInterval)
+                {
+                    options |= NoteOptions.IntervalLabel;
+                }
+
                 DrawingUtils.DrawNote(tone.Note,
+                    tone.Interval,
                     center: GetPoint(position),
                     radius: NoteRadius,
                     canvas,
-                    tone.Note == overlay.Root ? NoteStyle.Emphasized : NoteStyle.Normal);
+                    options);
             }
         }
     }

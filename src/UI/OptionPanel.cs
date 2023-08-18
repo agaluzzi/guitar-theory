@@ -12,10 +12,17 @@ public class OptionPanel : Grid
         Notes,
     }
 
+    private enum NoteDisplay
+    {
+        Note,
+        Interval,
+    }
+
     private readonly FretboardOverlay overlay;
     private readonly RadioChips<Mode> modeSwitcher;
     private readonly RadioChips<Chord> chordSwitcher;
     private readonly RadioChips<Scale> scaleSwitcher;
+    private readonly RadioChips<NoteDisplay> noteDisplaySwitcher;
 
     public OptionPanel(FretboardOverlay overlay)
     {
@@ -41,9 +48,16 @@ public class OptionPanel : Grid
             Options = Scales.All.Select(scale => (scale.Name, Value: scale)),
         };
 
+        noteDisplaySwitcher = new RadioChips<NoteDisplay>
+        {
+            Options = Enum.GetValues<NoteDisplay>().Select(val => (Name: val.ToString(), Value: val)),
+            Selected = NoteDisplay.Note,
+        };
+
         modeSwitcher.SelectionChanged += _ => OnSelectionChanged();
         chordSwitcher.SelectionChanged += _ => OnSelectionChanged();
         scaleSwitcher.SelectionChanged += _ => OnSelectionChanged();
+        noteDisplaySwitcher.SelectionChanged += _ => OnSelectionChanged();
 
         var modeSection = BuildSection("MODE", modeSwitcher);
 
@@ -59,16 +73,24 @@ public class OptionPanel : Grid
                 source: modeSwitcher,
                 convert: (Mode mode) => mode == Mode.Scales);
 
-        var divider = new BoxView {Color = Colors.White};
+        var noteDisplaySection = BuildSection("DISPLAY", noteDisplaySwitcher);
 
-        this.AddColumn(GridLength.Star, out var modeColumn);
-        this.AddColumn(2, out var dividerColumn);
-        this.AddColumn(new GridLength(2, GridUnitType.Star), out var typeColumn);
+        this.AddColumn(GridLength.Star, out var left);
+        this.AddColumn(2, out var dividerLeft);
+        this.AddColumn(new GridLength(2, GridUnitType.Star), out var middle);
+        this.AddColumn(2, out var dividerRight);
+        this.AddColumn(GridLength.Star, out var right);
 
-        Add(modeSection.Row(0).Column(modeColumn));
-        Add(divider.Row(0).Column(dividerColumn));
-        Add(chordSection.Row(0).Column(typeColumn));
-        Add(scaleSection.Row(0).Column(typeColumn));
+        Add(modeSection.Row(0).Column(left));
+        Add(Divider().Row(0).Column(dividerLeft));
+        Add(chordSection.Row(0).Column(middle));
+        Add(scaleSection.Row(0).Column(middle));
+        Add(Divider().Row(0).Column(dividerRight));
+        Add(noteDisplaySection.Row(0).Column(right));
+
+        return;
+
+        View Divider() => new BoxView {Color = Colors.White};
     }
 
     private void OnSelectionChanged()
@@ -88,6 +110,8 @@ public class OptionPanel : Grid
             default:
                 throw new ArgumentOutOfRangeException("Unexpected mode: " + mode);
         }
+
+        overlay.DisplayInterval = noteDisplaySwitcher.Selected == NoteDisplay.Interval;
     }
 
     private static View BuildSection(string title, View content)
