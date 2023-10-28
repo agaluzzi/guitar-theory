@@ -14,8 +14,8 @@ public class OptionPanel : Grid
 
     private enum NoteDisplay
     {
-        Note,
-        Interval,
+        Notes,
+        Intervals,
     }
 
     private readonly FretboardOverlay overlay;
@@ -51,7 +51,7 @@ public class OptionPanel : Grid
         noteDisplaySwitcher = new RadioChips<NoteDisplay>
         {
             Options = Enum.GetValues<NoteDisplay>().Select(val => (Name: val.ToString(), Value: val)),
-            Selected = NoteDisplay.Note,
+            Selected = NoteDisplay.Notes,
         };
 
         modeSwitcher.SelectionChanged += _ => OnSelectionChanged();
@@ -111,7 +111,7 @@ public class OptionPanel : Grid
                 throw new ArgumentOutOfRangeException("Unexpected mode: " + mode);
         }
 
-        overlay.DisplayInterval = noteDisplaySwitcher.Selected == NoteDisplay.Interval;
+        overlay.DisplayInterval = noteDisplaySwitcher.Selected == NoteDisplay.Intervals;
     }
 
     private static View BuildSection(string title, View content)
