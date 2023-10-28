@@ -16,6 +16,35 @@ public partial class GuitarView : XGraphicsView
         this.guitar = guitar;
         this.overlay = overlay;
         overlay.Changed += Invalidate;
+        StartInteraction += OnStartInteraction;
+    }
+
+    private void OnStartInteraction(object? sender, TouchEventArgs e)
+    {
+        if (e.Touches.Length == 0) return;
+        var touch = e.Touches[0];
+
+        Pitch? pitch = null;
+        var closest = float.MaxValue;
+        foreach (var position in guitar.FingerPositions)
+        {
+            var point = GetPoint(position);
+            var distance = point.Distance(touch);
+            if (distance < closest)
+            {
+                pitch = position.Pitch;
+                closest = distance;
+            }
+        }
+
+        if (pitch != null)
+        {
+            // If this pitch is already selected, just toggle between ♯ and ♭.
+            // Otherwise, find the matching note.
+            overlay.Root = overlay.Root.Pitch == pitch ?
+                overlay.Root.GetAlternate() :
+                Note.Get(pitch.Value, prefer: Accidental.Natural);
+        }
     }
 
     protected override void Draw(

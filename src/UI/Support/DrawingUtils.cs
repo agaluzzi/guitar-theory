@@ -34,7 +34,7 @@ public static class DrawingUtils
         if (options.HasFlag(NoteOptions.IntervalLabel) && interval?.Degree > 1)
         {
             text = interval.Abbreviation;
-            textSize = radius * 0.9f;
+            textSize = radius * 0.8f;
         }
 
         var textOffsetX = text.EndsWith("♭") || text.EndsWith("♯") ? 2 : 0;
