@@ -1,11 +1,11 @@
 namespace GuitarTheory;
 
-public readonly struct GuitarString
+public readonly struct InstrumentString
 {
     public int Number { get; }
     public Note OpenNote { get; }
 
-    public GuitarString(int number, Note openNote)
+    public InstrumentString(int number, Note openNote)
     {
         if (number < 1)
         {

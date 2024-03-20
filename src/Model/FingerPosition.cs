@@ -1,6 +1,6 @@
 namespace GuitarTheory;
 
-public record FingerPosition(GuitarString String, Fret Fret)
+public record FingerPosition(InstrumentString String, Fret Fret)
 {
     public Pitch Pitch => String.GetPitch(Fret);
 }

@@ -5,15 +5,15 @@ namespace GuitarTheory;
 
 public partial class GuitarView : XGraphicsView
 {
-    private int StringCount => guitar.Strings.Count;
-    private int FretCount => guitar.Frets.Count;
+    private int StringCount => instrument.Strings.Count;
+    private int FretCount => instrument.Frets.Count;
 
-    private readonly Guitar guitar;
+    private readonly Instrument instrument;
     private readonly FretboardOverlay overlay;
 
-    public GuitarView(Guitar guitar, FretboardOverlay overlay)
+    public GuitarView(Instrument instrument, FretboardOverlay overlay)
     {
-        this.guitar = guitar;
+        this.instrument = instrument;
         this.overlay = overlay;
         overlay.Changed += Invalidate;
         StartInteraction += OnStartInteraction;
@@ -26,7 +26,7 @@ public partial class GuitarView : XGraphicsView
 
         Pitch? pitch = null;
         var closest = float.MaxValue;
-        foreach (var position in guitar.FingerPositions)
+        foreach (var position in instrument.FingerPositions)
         {
             var point = GetPoint(position);
             var distance = point.Distance(touch);
@@ -75,7 +75,7 @@ public partial class GuitarView : XGraphicsView
     {
         canvas.FillRectangle(FretboardBounds, FretboardPaint);
 
-        foreach (var fret in guitar.Frets)
+        foreach (var fret in instrument.Frets)
         {
             var width = fret == 0 ? NutWidth : FretWidth;
             var paint = fret == 0 ? NutPaint : FretPaint;
@@ -113,7 +113,7 @@ public partial class GuitarView : XGraphicsView
             from: (X: 1, Y: 2),
             to: (X: StringCount, Y: 4));
 
-        foreach (var str in guitar.Strings)
+        foreach (var str in instrument.Strings)
         {
             var stringSize = (float) sizeInterpolation.GetY(str.Number);
             var y = GetStringY(str) - (stringSize / 2);
@@ -142,7 +142,7 @@ public partial class GuitarView : XGraphicsView
     {
         foreach (var tone in overlay.Tones)
         {
-            foreach (var position in guitar.FingerPositions.Where(p => tone.Matches(p.Pitch)))
+            foreach (var position in instrument.FingerPositions.Where(p => tone.Matches(p.Pitch)))
             {
                 var options = NoteOptions.UpDownArrow;
                 if (tone.Interval.IsRoot)
@@ -164,7 +164,7 @@ public partial class GuitarView : XGraphicsView
         }
     }
 
-    private float GetStringY(GuitarString str)
+    private float GetStringY(InstrumentString str)
     {
         return FretboardBounds.Top + StringInset + ((str.Number - 1) * StringSpacing);
     }

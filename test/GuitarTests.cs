@@ -5,7 +5,7 @@ public class GuitarTests
     [Test]
     public void ShouldGetStrings()
     {
-        var guitar = new Guitar(frets: 15);
+        var guitar = Instruments.Default; // should be standard guitar
 
         guitar.Strings.Should().HaveCount(6);
 
@@ -29,7 +29,7 @@ public class GuitarTests
     public void ShouldGetAllFrets()
     {
         const int count = 12;
-        var guitar = new Guitar(frets: count);
+        var guitar = new Instrument("Test Instrument", frets: count);
         guitar.Frets.Should().HaveCount(count + 1); // including the open string (fret 0)
         for (var i = 0; i < count + 1; i++)
         {

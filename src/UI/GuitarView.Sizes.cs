@@ -22,7 +22,7 @@ public partial class GuitarView
         FretWidth = FretSpacing / 12;
         NutWidth = FretWidth * 1.5f;
 
-        var fretboardHeight = FretSpacing * 3.5f;
+        var fretboardHeight = FretSpacing * StringCount * 0.5f;
         StringInset = fretboardHeight * 0.03f;
         StringSpacing = (fretboardHeight - (2 * StringInset)) / (StringCount - 1);
         NoteRadius = StringSpacing * 0.35f;
