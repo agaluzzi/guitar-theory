@@ -6,7 +6,7 @@ namespace GuitarTheory;
 
 public class MainPage : ContentPage
 {
-    private Instrument instrument = Instruments.Default;
+    private Instrument instrument = Instruments.Guitar;
     private readonly FretboardOverlay overlay = new();
     private readonly AbsoluteLayout rootLayout = new();
 
@@ -89,7 +89,7 @@ public class MainPage : ContentPage
 
         void OnTap()
         {
-            var instrumentNames = Instruments.All.Select(i => i.Name).ToArray();
+            var instrumentNames = Instruments.GetAll().Select(i => i.Name).ToArray();
 
             DisplayActionSheet(
                     title: "Select Instrument",
@@ -101,7 +101,7 @@ public class MainPage : ContentPage
                     if (task.IsCompletedSuccessfully)
                     {
                         var name = task.Result;
-                        instrument = Instruments.All.First(i => i.Name == name);
+                        instrument = Instruments.GetAll().First(i => i.Name == name);
                         MainThread.BeginInvokeOnMainThread(UpdateLayout);
                     }
                 });

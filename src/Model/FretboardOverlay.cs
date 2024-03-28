@@ -38,7 +38,7 @@ public class FretboardOverlay
     }
 
     private Note root = Note.C;
-    private IPattern pattern = Scales.All[0];
+    private IPattern pattern = Scales.Major;
     public string Title => pattern.Describe(root);
     private bool displayInterval;
 }

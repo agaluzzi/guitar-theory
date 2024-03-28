@@ -40,12 +40,12 @@ public class OptionPanel : Grid
 
         chordSwitcher = new RadioChips<Chord>
         {
-            Options = Chords.All.Select(chord => (chord.Name, Value: chord)),
+            Options = Chords.GetAll().Select(chord => (chord.Name, Value: chord)),
         };
 
         scaleSwitcher = new RadioChips<Scale>
         {
-            Options = Scales.All.Select(scale => (scale.Name, Value: scale)),
+            Options = Scales.GetAll().Select(scale => (scale.Name, Value: scale)),
         };
 
         noteDisplaySwitcher = new RadioChips<NoteDisplay>

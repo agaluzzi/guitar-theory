@@ -2,6 +2,9 @@ namespace GuitarTheory;
 
 public record Interval
 {
+    public static IReadOnlyList<Interval> GetAll() =>
+        typeof(Interval).GetPublicStaticFields<Interval>().OrderBy(i => i.Semitones).ToArray();
+
     public static readonly Interval Unison =
         new("Unison", IntervalType.Perfect, degree: 1, semitones: 0);
 

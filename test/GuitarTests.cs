@@ -5,7 +5,7 @@ public class GuitarTests
     [Test]
     public void ShouldGetStrings()
     {
-        var guitar = Instruments.Default; // should be standard guitar
+        var guitar = Instruments.Guitar;
 
         guitar.Strings.Should().HaveCount(6);
 

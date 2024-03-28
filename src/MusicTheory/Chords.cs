@@ -2,45 +2,45 @@ namespace GuitarTheory;
 
 public static class Chords
 {
-    public static readonly IReadOnlyList<Chord> All = new[]
-    {
-        new Chord("Major",
-            Interval.MajorThird,
-            Interval.PerfectFifth),
+    public static IReadOnlyList<Chord> GetAll() =>
+        typeof(Chords).GetPublicStaticFields<Chord>().ToArray();
 
-        new Chord("Minor",
-            Interval.MinorThird,
-            Interval.PerfectFifth),
+    public static readonly Chord Major = new("Major",
+        Interval.MajorThird,
+        Interval.PerfectFifth);
 
-        new Chord("7",
-            Interval.MajorThird,
-            Interval.PerfectFifth,
-            Interval.MinorSeventh),
+    public static readonly Chord Minor = new("Minor",
+        Interval.MinorThird,
+        Interval.PerfectFifth);
 
-        new Chord("maj7",
-            Interval.MajorThird,
-            Interval.PerfectFifth,
-            Interval.MajorSeventh),
+    public static readonly Chord Dominant7th = new("7",
+        Interval.MajorThird,
+        Interval.PerfectFifth,
+        Interval.MinorSeventh);
 
-        new Chord("min7",
-            Interval.MinorThird,
-            Interval.PerfectFifth,
-            Interval.MinorSeventh),
+    public static readonly Chord Major7th = new("maj7",
+        Interval.MajorThird,
+        Interval.PerfectFifth,
+        Interval.MajorSeventh);
 
-        new Chord("Diminished",
-            Interval.MinorThird,
-            Interval.DiminishedFifth),
+    public static readonly Chord Minor7th = new("min7",
+        Interval.MinorThird,
+        Interval.PerfectFifth,
+        Interval.MinorSeventh);
 
-        new Chord("Augmented",
-            Interval.MajorThird,
-            Interval.AugmentedFifth),
+    public static readonly Chord Diminished = new("Diminished",
+        Interval.MinorThird,
+        Interval.DiminishedFifth);
 
-        new Chord("sus4",
-            Interval.PerfectFourth,
-            Interval.PerfectFifth),
+    public static readonly Chord Augmented = new("Augmented",
+        Interval.MajorThird,
+        Interval.AugmentedFifth);
 
-        new Chord("sus2",
-            Interval.MajorSecond,
-            Interval.PerfectFifth),
-    };
+    public static readonly Chord Suspended4th = new("sus4",
+        Interval.PerfectFourth,
+        Interval.PerfectFifth);
+
+    public static readonly Chord Suspended2nd = new("sus2",
+        Interval.MajorSecond,
+        Interval.PerfectFifth);
 }
