@@ -1,27 +1,34 @@
+using Color = System.Drawing.Color;
+
 namespace GuitarTheory.UI.Support;
 
 public static class ColorScheme
 {
-    public static Color GetColor(Note note)
+    public static Color GetColor(Interval interval)
     {
-        var hues = note.Letter switch
+        var hue = interval.Degree switch
         {
-            'A' => Palette.Red,
-            'B' => Palette.Orange,
-            'C' => Palette.Yellow,
-            'D' => Palette.Green,
-            'E' => Palette.Blue,
-            'F' => Palette.Indigo,
-            'G' => Palette.Purple,
-            _ => throw new ArgumentOutOfRangeException("Unexpected note letter " + note.Letter)
+            1 or 8 => Palette.Red,
+            2 => Palette.Orange,
+            3 => Palette.Yellow,
+            4 => Palette.Green,
+            5 => Palette.LightBlue,
+            6 => Palette.Indigo,
+            7 => Palette.Purple,
+            _ => throw new ArgumentOutOfRangeException($"Unexpected interval degree: {interval.Degree}")
         };
 
-        return note.Accidental switch
+        if (interval.IsLowered)
         {
-            Accidental.Sharp => hues[4], // lighter
-            Accidental.Natural => hues[6],
-            Accidental.Flat => hues[8], // darker
-            _ => throw new ArgumentOutOfRangeException("Unexpected accidental: " + note.Accidental)
-        };
+            return hue.Dark;
+        }
+        else if (interval.IsRaised)
+        {
+            return hue.Light;
+        }
+        else
+        {
+            return hue.Normal;
+        }
     }
 }

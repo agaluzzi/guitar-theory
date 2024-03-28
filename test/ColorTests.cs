@@ -1,17 +1,23 @@
+using System.Reflection;
 using System.Text;
 using GuitarTheory.UI.Support;
+using Color = System.Drawing.Color;
 
 namespace UnitTests;
 
 public class ColorTests
 {
-    [Datapoints]
-    private static IEnumerable<Note> Notes => Note.All;
-
-    [Theory]
-    public void ShouldHaveColor(Note note)
+    [Test]
+    public void IntervalShouldHaveUniqueColor()
     {
-        ColorScheme.GetColor(note).Should().NotBeNull();
+        var mapping = Interval.GetAll()
+            .ToDictionary(
+                keySelector: interval => interval,
+                elementSelector: ColorScheme.GetColor);
+
+        var distinctColors = mapping.Values.Distinct().Count();
+        distinctColors.Should().Be(mapping.Count - 1);
+        mapping[Interval.Unison].Should().Be(mapping[Interval.Octave]);
     }
 
     [Test, Explicit]
@@ -20,22 +26,26 @@ public class ColorTests
         var report = new StringBuilder();
         report.Append("<html><body>");
 
-        foreach (var note in Note.All)
+        report.Append("<h2>Intervals</h2>");
+        foreach (var interval in Interval.GetAll())
         {
-            var color = ColorScheme.GetColor(note);
-            AppendColor(color, note.Name);
+            var color = ColorScheme.GetColor(interval);
+            AppendColor(color, $"{interval.Abbreviation} ~ {interval.Name}");
         }
 
-        foreach (var field in typeof(Palette).GetFields().Where(f => f.IsStatic && f.IsPublic))
+        report.Append($"<br/><br/>");
+
+        foreach (var field in typeof(Palette)
+                     .GetFields(BindingFlags.Public | BindingFlags.Static)
+                     .Where(f => f.FieldType == typeof(Hue)))
         {
-            if (field.GetValue(null) is IReadOnlyList<Color> colors)
-            {
-                report.Append("<br/><br/>");
-                for (var i = 0; i < colors.Count; i++)
-                {
-                    AppendColor(colors[i], $"{field.Name}-{i}");
-                }
-            }
+            var hue = (Hue) field.GetValue(null)!;
+            report.Append($"<h2>{field.Name}</h2>");
+            AppendColor(hue.ExtraLight, "ExtraLight");
+            AppendColor(hue.Light, "Light");
+            AppendColor(hue.Normal, "Normal");
+            AppendColor(hue.Dark, "Dark");
+            AppendColor(hue.ExtraDark, "ExtraDark");
         }
 
         report.Append("</html></body>");
@@ -45,10 +55,12 @@ public class ColorTests
 
         void AppendColor(Color color, string name)
         {
+            var mauiColor = color.ToMauiColor();
+
             report.Append($"<div style=\"" +
                           $"padding:10px;" +
-                          $"background-color:{color.ToHex()};" +
-                          $"color:{color.GetContrastingColor().ToHex()};" +
+                          $"background-color:{mauiColor.ToHex()};" +
+                          $"color:{mauiColor.GetContrastingColor().ToHex()};" +
                           $"width:50%;" +
                           $"font-size:2em;\">" +
                           $"{name}" +

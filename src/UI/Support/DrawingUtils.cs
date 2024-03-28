@@ -20,7 +20,7 @@ public static class DrawingUtils
         }
         else
         {
-            color = ColorScheme.GetColor(note);
+            color = ColorScheme.GetColor(interval ?? Interval.Unison).ToMauiColor();
         }
         canvas.FillCircle(center, radius, color.AsPaint());
 
